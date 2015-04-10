@@ -1,8 +1,20 @@
 package i2c
 
-// #include <stddef.h>
-// #include <sys/types.h>
-// #include <linux/i2c-dev.h>
+/*
+#include <stddef.h>
+#include <sys/types.h>
+#include <linux/version.h>
+#include <linux/i2c-dev.h>
+#if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
+#include <linux/i2c.h>
+#endif
+struct compat_i2c_smbus_ioctl_data {
+        char read_write;
+        __u8 command;
+        int size;
+        union i2c_smbus_data *data;
+};
+*/
 import "C"
 
 import (
@@ -76,7 +88,7 @@ func (i2c *I2C) SetAddress(address int) error {
 }
 
 func (i2c *I2C) smbusAccess(readWrite, register uint8, size int, data unsafe.Pointer) (uintptr, error) {
-	args := C.struct_i2c_smbus_ioctl_data{
+	args := C.struct_compat_i2c_smbus_ioctl_data{
 		read_write: C.char(readWrite),
 		command:    C.__u8(register),
 		size:       C.int(size),
