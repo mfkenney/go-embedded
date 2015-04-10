@@ -1,11 +1,11 @@
 package i2c
 
 /*
+#cgo linux,arm CFLAGS: -DOLD_I2C_API
 #include <stddef.h>
 #include <sys/types.h>
-#include <linux/version.h>
 #include <linux/i2c-dev.h>
-#if LINUX_VERSION_CODE < KERNEL_VERSION(3,0,0)
+#ifdef OLD_I2C_API
 #include <linux/i2c.h>
 #endif
 struct compat_i2c_smbus_ioctl_data {
